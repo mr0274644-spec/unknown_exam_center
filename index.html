@@ -1,0 +1,489 @@
+ <!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Exam Portal - Home & Exam</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f3f6fa;
+      margin: 0;
+      padding: 20px;
+      color: #1f2937;
+    }
+    .box {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Home Page Styles */
+    .center-header {
+      text-align: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 20px;
+    }
+    .center-header h1 {
+      margin: 0 0 6px 0;
+      font-size: 26px;
+      color: #111827;
+    }
+    .center-header p {
+      margin: 0;
+      color: #4b5563;
+      font-size: 15px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 600px) {
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .meta-label {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .rules-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 5px solid #d97706;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+    .rules-box h3 {
+      margin: 0 0 10px 0;
+      font-size: 17px;
+      color: #92400e;
+    }
+    .rules-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .rules-list li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    /* Exam Screen Styles */
+    #examScreen, #resultScreen {
+      display: none;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .top-bar h2 {
+      margin: 0;
+      font-size: 21px;
+      color: #111827;
+    }
+    .timer-badge {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .timer-warning {
+      background: #fef2f2;
+      color: #dc2626;
+      border-color: #fecaca;
+    }
+    .student-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) {
+      .student-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    input[type="text"] {
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .q-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #2563eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .q-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .opt {
+      display: block;
+      padding: 6px 0;
+      cursor: pointer;
+    }
+    .btn-start {
+      width: 100%;
+      padding: 15px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-start:hover {
+      background: #1d4ed8;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-submit:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* Result Styles */
+    .summary-box {
+      padding: 22px;
+      border-radius: 10px;
+      background: #ecfdf5;
+      border: 1px solid #86efac;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .score-big {
+      font-size: 28px;
+      font-weight: 700;
+      color: #14532d;
+      margin: 10px 0;
+    }
+    .review-item {
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+    }
+    .review-correct {
+      background: #f0fdf4;
+      border-left: 5px solid #16a34a;
+    }
+    .review-wrong {
+      background: #fef2f2;
+      border-left: 5px solid #dc2626;
+    }
+    .tag-correct {
+      color: #15803d;
+      font-weight: 700;
+    }
+    .tag-wrong {
+      color: #b91c1c;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <!-- ১. হোম পেজ ও নিয়মাবলি -->
+    <div id="homeScreen">
+      <div class="center-header">
+        <h1 id="examTitleDisplay">Unknown Exam Center</h1>
+        <p id="examSubtitleDisplay">পরীক্ষা শুরু করার আগে নিচের নিয়মাবলি মনোযোগ সহকারে পড়ুন</p>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-label">মোট প্রশ্ন</div>
+          <div class="meta-value" id="metaQuestions">0 টি</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">নির্ধারিত সময়</div>
+          <div class="meta-value" id="metaDuration">0 মিনিট</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">ফলাফল</div>
+          <div class="meta-value">তাৎক্ষণিক</div>
+        </div>
+      </div>
+
+      <div class="rules-box">
+        <h3>পরীক্ষার নিয়মাবলি:</h3>
+        <ul class="rules-list" id="rulesList"></ul>
+      </div>
+
+      <button type="button" class="btn-start" id="startExamBtn">পরীক্ষা শুরু করুন</button>
+    </div>
+
+    <!-- ২. পরীক্ষার মূল পাতা -->
+    <div id="examScreen">
+      <div class="top-bar">
+        <h2 id="examHeaderTitle">পরীক্ষার প্রশ্নপত্র</h2>
+        <div class="timer-badge" id="timerBox">সময় বাকি: <span id="timerText">15:00</span></div>
+      </div>
+
+      <form id="examForm">
+        <div class="student-info">
+          <input type="text" id="studentName" placeholder="শিক্ষার্থীর পূর্ণ নাম" />
+          <input type="text" id="studentId" placeholder="Student ID / রোল নম্বর" />
+        </div>
+
+        <div id="questionsArea"></div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">পরীক্ষা সাবমিট ও রেজাল্ট দেখুন</button>
+      </form>
+    </div>
+
+    <!-- ৩. ফলাফল ও উত্তর বিশ্লেষণ -->
+    <div id="resultScreen">
+      <div class="summary-box">
+        <h2>আপনার পরীক্ষা সম্পন্ন হয়েছে</h2>
+        <div class="score-big" id="scoreDisplay"></div>
+        <p id="saveStatus">রেজাল্ট Google Sheet-এ পাঠানো হচ্ছে...</p>
+      </div>
+
+      <h3>প্রশ্নভিত্তিক উত্তর বিশ্লেষণ:</h3>
+      <div id="reviewArea"></div>
+    </div>
+  </div>
+
+  <script>
+    // ধাপ ২ থেকে পাওয়া Web app URL এখানে বসান
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxils55kB_v3ZVxFVpfsldyqsy7YSXGeqLKRxM_RQZYFJiPH3vpoql3AqNA3MFvvg96/exec";
+
+    // পরীক্ষার তথ্য ও নিয়মাবলি কাস্টমাইজ করুন
+    const EXAM_TITLE = "Unknown Exam Center";
+    const EXAM_SUBTITLE = "নির্ধারিত সময়ের মধ্যে প্রশ্নগুলোর উত্তর দিন";
+    const EXAM_MINUTES = 5;
+
+    const EXAM_RULES = [
+      "পরীক্ষা শুরু করার সাথে সাথে কাউন্টডাউন টাইমার চালু হবে।",
+      "সঠিক নাম এবং Student ID / রোল নম্বর অবশ্যই লিখতে হবে।",
+      "নির্ধারিত সময় শেষ হয়ে গেলে পরীক্ষা অটোমেটিক সাবমিট হয়ে যাবে।",
+      "সাবমিট করার সাথে সাথে স্ক্রিনে আপনার নম্বর এবং সঠিক উত্তরগুলো দেখতে পাবেন।",
+      "পরীক্ষা চলাকালীন পেজ রিফ্রেশ বা বন্ধ করবেন না।"
+    ];
+
+    // পরীক্ষার প্রশ্নাবলী (answer: 0, 1, 2, 3,)
+    const examQuestions = [
+      {
+        question: "১. বাংলাদেশের জাতীয় ফুল কী?",
+        options: ["গোলাপ", "শাপলা", "জবা", "পদ্ম"],
+        answer: 1
+      },
+      {
+        question: "২. পানির রাসায়নিক সংকেত কোনটি?",
+        options: ["CO2", "NaCl", "H2O", "O2"],
+        answer: 2
+      },
+      {
+        question: "৩. কম্পিউটারের মস্তিষ্ক বলা হয় কাকে?",
+        options: ["Monitor", "Keyboard", "CPU", "Mouse"],
+        answer: 2
+      }
+    ];
+
+    let remainingSeconds = EXAM_MINUTES * 60;
+    let timerInterval = null;
+    let isSubmitted = false;
+
+    const homeScreen = document.getElementById("homeScreen");
+    const examScreen = document.getElementById("examScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const questionsArea = document.getElementById("questionsArea");
+    const timerText = document.getElementById("timerText");
+    const timerBox = document.getElementById("timerBox");
+
+    // হোম পেজে তথ্য ও নিয়মাবলি বসানো
+    document.getElementById("examTitleDisplay").textContent = EXAM_TITLE;
+    document.getElementById("examSubtitleDisplay").textContent = EXAM_SUBTITLE;
+    document.getElementById("examHeaderTitle").textContent = EXAM_TITLE;
+    document.getElementById("metaQuestions").textContent = `${examQuestions.length} টি`;
+    document.getElementById("metaDuration").textContent = `${EXAM_MINUTES} মিনিট`;
+
+    const rulesListEl = document.getElementById("rulesList");
+    EXAM_RULES.forEach((ruleText) => {
+      const li = document.createElement("li");
+      li.textContent = ruleText;
+      rulesListEl.appendChild(li);
+    });
+
+    // প্রশ্নপত্র তৈরি করা
+    examQuestions.forEach((item, qIndex) => {
+      let optionsHtml = "";
+      item.options.forEach((optText, optIndex) => {
+        optionsHtml += `
+          <label class="opt">
+            <input type="radio" name="q_${qIndex}" value="${optIndex}" />
+            ${optText}
+          </label>
+        `;
+      });
+
+      questionsArea.innerHTML += `
+        <div class="q-card">
+          <div class="q-title">${item.question}</div>
+          ${optionsHtml}
+        </div>
+      `;
+    });
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+
+    timerText.textContent = formatTime(remainingSeconds);
+
+    // "পরীক্ষা শুরু করুন" বাটনে ক্লিক করলে হোম পেজ লুকিয়ে পরীক্ষা ও টাইমার শুরু হবে
+    document.getElementById("startExamBtn").addEventListener("click", function () {
+      homeScreen.style.display = "none";
+      examScreen.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      timerInterval = setInterval(() => {
+        if (isSubmitted) {
+          clearInterval(timerInterval);
+          return;
+        }
+
+        remainingSeconds--;
+        timerText.textContent = formatTime(remainingSeconds);
+
+        if (remainingSeconds <= 60) {
+          timerBox.classList.add("timer-warning");
+        }
+
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          submitExam(true);
+        }
+      }, 1000);
+    });
+
+    // পরীক্ষা সাবমিট ও রেজাল্ট তৈরি
+    async function submitExam(isAutoSubmit = false) {
+      if (isSubmitted) return;
+
+      const nameInput = document.getElementById("studentName");
+      const idInput = document.getElementById("studentId");
+      const studentName = nameInput.value.trim() || (isAutoSubmit ? "Unknown (Time Up)" : "");
+      const studentId = idInput.value.trim() || (isAutoSubmit ? "N/A" : "");
+
+      if (!isAutoSubmit && (!nameInput.value.trim() || !idInput.value.trim())) {
+        alert("অনুগ্রহ করে শিক্ষার্থীর নাম এবং Student ID লিখুন।");
+        return;
+      }
+
+      isSubmitted = true;
+      clearInterval(timerInterval);
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "রেজাল্ট তৈরি হচ্ছে...";
+
+      let score = 0;
+      let reviewHtml = "";
+
+      examQuestions.forEach((item, qIndex) => {
+        const chosen = document.querySelector(`input[name="q_${qIndex}"]:checked`);
+        const userAnsIndex = chosen ? Number(chosen.value) : null;
+        const isCorrect = userAnsIndex === item.answer;
+
+        if (isCorrect) {
+          score++;
+        }
+
+        const userAnsText = userAnsIndex !== null ? item.options[userAnsIndex] : "উত্তর দেওয়া হয়নি";
+        const correctAnsText = item.options[item.answer];
+
+        reviewHtml += `
+          <div class="review-item ${isCorrect ? "review-correct" : "review-wrong"}">
+            <div class="q-title">${item.question}</div>
+            <div>আপনার উত্তর: <span class="${isCorrect ? "tag-correct" : "tag-wrong"}">${userAnsText}</span></div>
+            ${!isCorrect ? `<div>সঠিক উত্তর: <span class="tag-correct">${correctAnsText}</span></div>` : ""}
+          </div>
+        `;
+      });
+
+      const totalQuestions = examQuestions.length;
+
+      examScreen.style.display = "none";
+      resultScreen.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      document.getElementById("scoreDisplay").textContent = `আপনার স্কোর: ${score} / ${totalQuestions}`;
+      document.getElementById("reviewArea").innerHTML = reviewHtml;
+
+      const saveStatus = document.getElementById("saveStatus");
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: studentName,
+            studentId: studentId,
+            score: score,
+            total: totalQuestions
+          })
+        });
+
+        saveStatus.textContent = "আপনার Student ID ও মোট স্কোর সফলভাবে Google Sheet-এ সংরক্ষিত হয়েছে।";
+      } catch (error) {
+        saveStatus.textContent = "ইন্টারনেট বা URL সমস্যার কারণে Sheet-এ পাঠানো যায়নি।";
+      }
+    }
+
+    document.getElementById("examForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      submitExam(false);
+    });
+  </script>
+</body>
+</html>
